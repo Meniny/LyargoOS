@@ -1,0 +1,17 @@
+[KDE]
+ColorScheme=BreezeDark
+
+[General]
+XftHintStyle=hintslight
+XftSubPixel=rgb
+
+[Icons]
+Theme=Papirus-Dark
+
+[WM]
+activeBackground=#2a2e32
+activeBlend=#c9ced6
+activeForeground=#fcfcfc
+inactiveBackground=#2a2e32
+inactiveBlend=#6d7074
+inactiveForeground=#b3b3b3

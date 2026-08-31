@@ -1,0 +1,155 @@
+name: Build LyargoOS ISO
+
+on:
+  workflow_dispatch:
+    inputs:
+      flavor:
+        description: "Desktop flavor"
+        default: "kde"
+        required: true
+        type: choice
+        options:
+          - kde
+          - xfce
+          - gnome
+      arch:
+        description: "Architecture to build"
+        default: "x86_64"
+        required: true
+        type: choice
+        options:
+          - x86_64
+          - i686
+          - aarch64
+      installer:
+        description: "Installer type"
+        default: "cli"
+        required: true
+        type: choice
+        options:
+          - cli
+          - gui
+          - full
+      datecode:
+        description: "Override datecode (YYYYMMDD, leave empty for today)"
+        required: false
+        type: string
+      release:
+        description: "Create GitHub release"
+        required: true
+        type: boolean
+        default: false
+      tag:
+        description: "Release tag (e.g., v20250901, only used if release is enabled)"
+        required: false
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build LyargoOS ISO
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    container:
+      image: 'ghcr.io/void-linux/void-mklive:20250116R1'
+      options: --privileged
+      volumes:
+        - /dev:/dev
+    env:
+      PATH: '/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/usr/local/bin:/tmp/bin'
+
+    steps:
+      - name: Prepare container
+        run: xbps-install -Syu xbps && xbps-install -yu
+
+      - name: Checkout LyargoOS
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Determine build parameters
+        id: params
+        run: |
+          FLAVOR="${{ inputs.flavor }}"
+          FLAVOR="${FLAVOR:-kde}"
+          case "$FLAVOR" in
+            kde|xfce|gnome) ;;
+            *) echo "Error: invalid flavor: $FLAVOR" >&2; exit 1 ;;
+          esac
+          echo "flavor=$FLAVOR" >> $GITHUB_OUTPUT
+
+          DATECODE="${{ inputs.datecode }}"
+          if [ -n "$DATECODE" ]; then
+            # Validate datecode format (YYYYMMDD)
+            if ! echo "$DATECODE" | grep -qE '^[0-9]{8}$'; then
+              echo "Error: datecode must be in YYYYMMDD format" >&2
+              exit 1
+            fi
+            echo "datecode=$DATECODE" >> $GITHUB_OUTPUT
+          else
+            echo "datecode=$(date -u "+%Y%m%d")" >> $GITHUB_OUTPUT
+          fi
+
+          ARCH="${{ inputs.arch }}"
+          ARCH="${ARCH:-x86_64}"
+          # Validate arch is one of the expected values
+          case "$ARCH" in
+            x86_64|i686|aarch64) ;;
+            *) echo "Error: invalid arch: $ARCH" >&2; exit 1 ;;
+          esac
+          echo "arch=$ARCH" >> $GITHUB_OUTPUT
+
+          INSTALLER="${{ inputs.installer }}"
+          INSTALLER="${INSTALLER:-cli}"
+          case "$INSTALLER" in
+            cli|gui|full) ;;
+            *) echo "Error: invalid installer: $INSTALLER" >&2; exit 1 ;;
+          esac
+          echo "installer=$INSTALLER" >> $GITHUB_OUTPUT
+
+      - name: Build ISO
+        run: |
+          chmod +x mkiso.sh
+          ./mkiso.sh \
+            -f ${{ steps.params.outputs.flavor }} \
+            -a ${{ steps.params.outputs.arch }} \
+            -d ${{ steps.params.outputs.datecode }} \
+            -i ${{ steps.params.outputs.installer }}
+
+      - name: Upload ISO artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: LyargoOS-${{ steps.params.outputs.flavor }}-${{ steps.params.outputs.arch }}-${{ steps.params.outputs.datecode }}
+          path: void-live-*.iso
+          if-no-files-found: error
+
+      - name: Generate summary
+        run: |
+          cat >> "$GITHUB_STEP_SUMMARY" << EOF
+          ## LyargoOS Build Complete
+
+          - **Flavor:** ${{ steps.params.outputs.flavor }}
+          - **Architecture:** ${{ steps.params.outputs.arch }}
+          - **Installer:** ${{ steps.params.outputs.installer }}
+          - **Datecode:** ${{ steps.params.outputs.datecode }}
+          - **void-mklive commit:** $(cd void-mklive && git rev-parse --short HEAD)
+          EOF
+
+      - name: Create GitHub Release
+        if: inputs.release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          name: ${{ inputs.tag }}
+          generate_release_notes: true
+
+      - name: Upload ISO to release
+        if: inputs.release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.tag }}
+          files: void-live-*.iso

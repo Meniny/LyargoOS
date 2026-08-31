@@ -1,12 +1,14 @@
 # LyargoOS
 
-A custom Void Linux-based desktop distribution built using [void-mklive](https://github.com/void-linux/void-mklive).
+![LyargoOS Linux](banner.jpg)
+
+LyargoOS is an opinionated Void Linux-based distribution named after the author's nickname "李二狗" (Li Ergou). It provides a preconfigured desktop with curated application choices out of the box.
 
 ## Features
 
 - Multiple desktop flavors: KDE Plasma 5, XFCE, GNOME
 - Comprehensive CLI toolkit: zsh, nano, neovim, git, tmux, htop, eza, fzf, fastfetch, and more
-- GUI essentials: alacritty, gparted, gnome-disk-utility, zathura, copyq, celluloid, gwenview
+- GUI essentials: alacritty, gparted, gnome-disk-utility, zathura, CopyQ, celluloid, gwenview
 - Input method: fcitx5 with Rime, Chinese addons, and config tool
 - Papirus icon theme + WQY Microhei font
 - Calamares GUI installer with optional software selection (browsers, media, graphics, etc.)
@@ -23,19 +25,21 @@ A custom Void Linux-based desktop distribution built using [void-mklive](https:/
 ## Quick Start
 
 ```bash
-# Clone this repo
-git clone https://github.com/Meniny/LyargoOS.git
+# Clone this repo (includes void-mklive and lyargoos-artwork as submodules)
+git clone --recursive https://github.com/Meniny/LyargoOS.git
 cd lyargoos
 
-# Add void-mklive as a submodule
-git submodule add https://github.com/void-linux/void-mklive.git
-
 # Build the KDE ISO (default flavor)
-sudo ./mkiso.sh ./void-mklive
+sudo ./mkiso.sh
 
 # Or build XFCE / GNOME
-sudo ./mkiso.sh ./void-mklive -f xfce
-sudo ./mkiso.sh ./void-mklive -f gnome
+sudo ./mkiso.sh -f xfce
+sudo ./mkiso.sh -f gnome
+```
+
+If you already cloned without `--recursive`:
+```bash
+git submodule update --init --recursive
 ```
 
 The built ISO will be named `void-live-<arch>-<date>-<flavor>.iso`.
@@ -43,10 +47,13 @@ The built ISO will be named `void-live-<arch>-<date>-<flavor>.iso`.
 ## Build Options
 
 ```bash
-sudo ./mkiso.sh ./void-mklive -f kde              # Desktop flavor (default: kde)
-sudo ./mkiso.sh ./void-mklive -a x86_64            # Architecture (default: host arch)
-sudo ./mkiso.sh ./void-mklive -d 20240101          # Override datecode
-sudo ./mkiso.sh ./void-mklive -r https://...       # Add extra XBPS repo
+sudo ./mkiso.sh -f kde              # Desktop flavor (default: kde)
+sudo ./mkiso.sh -a x86_64            # Architecture (default: host arch)
+sudo ./mkiso.sh -d 20240101          # Override datecode
+sudo ./mkiso.sh -r https://...       # Add extra XBPS repo
+sudo ./mkiso.sh -i cli               # CLI installer only (smaller ISO)
+sudo ./mkiso.sh -i gui               # GUI installer only (Calamares)
+sudo ./mkiso.sh -i full              # Both installers (default)
 ```
 
 Supported architectures: `x86_64`, `i686`, `aarch64`, `asahi` (Apple Silicon)
@@ -95,7 +102,23 @@ Artwork and themes are installed via XBPS packages from the custom repo, not sto
 
 ## GitHub Actions
 
-Push to main or use the manual trigger in the Actions tab to build ISOs in CI. You can select the flavor, architecture, and datecode when triggering manually.
+ISOs are built manually from the Actions tab. Click **Build LyargoOS ISO** → **Run workflow**, then choose the flavor, architecture, installer type, and datecode.
+
+## Syncing with Upstream
+
+If you forked this repo and want to pull in updates:
+
+```bash
+# One-time: add the original repo as "upstream"
+git remote add upstream https://github.com/Meniny/LyargoOS.git
+
+# Whenever you want updates:
+git fetch upstream
+git merge upstream/main
+git push
+```
+
+Or use the **"Sync fork"** button on your fork's GitHub page.
 
 ## Documentation
 
@@ -105,8 +128,9 @@ Push to main or use the manual trigger in the Actions tab to build ISOs in CI. Y
 ## Updating void-mklive
 
 ```bash
-cd void-mklive && git pull
-cd .. && git add void-mklive && git commit -m "Update void-mklive submodule"
+git submodule update --remote void-mklive
+git add void-mklive
+git commit -m "Update void-mklive submodule"
 ```
 
 ## License

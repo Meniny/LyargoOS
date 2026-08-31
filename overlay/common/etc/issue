@@ -1,0 +1,27 @@
+###############################################################################
+
+Welcome to LyargoOS.
+
+Two users are available:
+
+    - root:voidlinux
+    - anon:voidlinux
+
+The 'anon' user has passwordless sudo access.
+
+To install LyargoOS to disk, run:
+
+    # void-installer
+
+LyargoOS uses xbps for package management:
+
+    - xbps-install(1) to install/update packages
+    - xbps-query(1) to query package info
+
+Flatpak is pre-configured with Flathub:
+
+    - flatpak install flathub <app-name>
+
+Thanks for using LyargoOS.
+
+###############################################################################
