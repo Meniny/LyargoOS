@@ -346,7 +346,7 @@ elif [ -f "$FLAVOR_POSTSETUP" ]; then
 fi
 
 # --- Build ISO ---
-IMG="void-live-${ARCH}-${DATE}-${FLAVOR}.iso"
+IMG="lyargoos-${ARCH}-${DATE}-${FLAVOR}.iso"
 
 info "Building LyargoOS ISO: $IMG"
 echo "    void-mklive: $MKLIVE_DIR"

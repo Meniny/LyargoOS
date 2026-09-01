@@ -124,7 +124,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: LyargoOS-${{ steps.params.outputs.flavor }}-${{ steps.params.outputs.arch }}-${{ steps.params.outputs.datecode }}
-          path: void-live-*.iso
+          path: lyargoos-*.iso
           if-no-files-found: error
 
       - name: Generate summary
@@ -139,17 +139,27 @@ jobs:
           - **void-mklive commit:** $(cd void-mklive && git rev-parse --short HEAD)
           EOF
 
+      - name: Determine release tag
+        id: release_tag
+        if: inputs.release
+        run: |
+          if [ -n "${{ inputs.tag }}" ]; then
+            echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=v${{ steps.params.outputs.datecode }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create GitHub Release
         if: inputs.release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ inputs.tag }}
-          name: ${{ inputs.tag }}
+          tag_name: ${{ steps.release_tag.outputs.tag }}
+          name: ${{ steps.release_tag.outputs.tag }}
           generate_release_notes: true
 
       - name: Upload ISO to release
         if: inputs.release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ inputs.tag }}
-          files: void-live-*.iso
+          tag_name: ${{ steps.release_tag.outputs.tag }}
+          files: lyargoos-*.iso
