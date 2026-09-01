@@ -22,6 +22,10 @@ LyargoOS is an opinionated Void Linux-based distribution named after the author'
 - Custom XBPS repository support
 - Void Linux compatible (uses official Void repos)
 
+## Why
+
+Because I'm lazy.
+
 ## Quick Start
 
 ```bash
