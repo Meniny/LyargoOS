@@ -2,7 +2,7 @@
 
 ![LyargoOS Linux](banner.jpg)
 
-LyargoOS 是一个基于 Void Linux 的个性化发行版，以作者的昵称"李二狗"命名。提供预配置的桌面环境和精选应用程序。
+[LyargoOS](https://hotodogo.com/lyargoos/) 是一个基于 Void Linux 的个性化发行版，以作者的昵称"李二狗"命名。提供预配置的桌面环境和精选应用程序。
 
 ## 特性
 

@@ -2,7 +2,7 @@
 
 ![LyargoOS Linux](banner.jpg)
 
-LyargoOS is an opinionated Void Linux-based distribution named after the author's nickname "李二狗" (Li Ergou). It provides a preconfigured desktop with curated application choices out of the box.
+[LyargoOS](https://hotodogo.com/lyargoos/) is an opinionated Void Linux-based distribution named after the author's nickname "李二狗" (Li Ergou). It provides a preconfigured desktop with curated application choices out of the box.
 
 ## Features
 
