@@ -21,6 +21,9 @@
 
 set -eu
 
+BUILD_START=$(date +%s)
+trap 'BUILD_END=$(date +%s); ELAPSED=$((BUILD_END - BUILD_START)); printf "\n\033[0;34m==>\033[0m Build time: %dm %ds\n" $((ELAPSED / 60)) $((ELAPSED % 60))' EXIT
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 MKLIVE_DIR="$SCRIPT_DIR/void-mklive"
 
@@ -416,8 +419,7 @@ fi
     -S "$SERVICES" \
     $INCLUDE_ARGS \
     -T "$BOOT_TITLE" \
-    -C "live.user=${LIVE_USER:-live}" \
-    -C "live.shell=/bin/zsh" \
+    -C "live.user=${LIVE_USER:-live} live.shell=/bin/zsh" \
     ${POSTSETUP_FULL:+-x "$POSTSETUP_FULL"} \
     ${KERNEL_PKG:+-v "$KERNEL_PKG"} \
     $REPO \
