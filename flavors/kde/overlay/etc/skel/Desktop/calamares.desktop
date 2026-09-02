@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Install LyargoOS
+GenericName=System Installer
+Keywords=calamares;system;installer;
+TryExec=calamares
+Exec=sh -c "pkexec calamares"
+Comment=Calamares — LyargoOS Installer
+Icon=lyargoos-logo
+Terminal=false
+StartupNotify=true
+Categories=Qt;System;
+X-AppStream-Ignore=true
+
+Name[zh_CN]=安装 LyargoOS
+GenericName[zh_CN]=系统安装程序
+Comment[zh_CN]=Calamares — LyargoOS 系统安装程序

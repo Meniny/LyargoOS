@@ -32,10 +32,10 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Helper functions
-info() { echo "${BLUE}==>${NC} $1"; }
-success() { echo "${GREEN}==>${NC} $1"; }
-warn() { echo "${YELLOW}==>${NC} $1" >&2; }
-error() { echo "${RED}Error:${NC} $1" >&2; }
+info() { echo -e "${BLUE}==>${NC} $1"; }
+success() { echo -e "${GREEN}==>${NC} $1"; }
+warn() { echo -e "${YELLOW}==>${NC} $1" >&2; }
+error() { echo -e "${RED}Error:${NC} $1" >&2; }
 
 # --- Validate void-mklive submodule ---
 if [ ! -d "$MKLIVE_DIR" ]; then
@@ -370,8 +370,8 @@ fi
 # Resolve artwork path for GRUB/isolinux splash image
 ARTWORK_FULL="$(cd "$SCRIPT_DIR" && cd "$ARTWORK_DIR" 2>/dev/null && pwd)" || ARTWORK_FULL=""
 SPLASH_ARGS=""
-if [ -n "$ARTWORK_FULL" ] && [ -f "$ARTWORK_FULL/grub/grub.jpg" ]; then
-    export SPLASH_IMAGE="$ARTWORK_FULL/grub/grub.jpg"
+if [ -n "$ARTWORK_FULL" ] && [ -f "$ARTWORK_FULL/grub/grub.png" ]; then
+    export SPLASH_IMAGE="$ARTWORK_FULL/grub/grub.png"
 fi
 
 # Copy LyargoOS signing key to void-mklive/keys/ so xbps trusts the custom repo
@@ -417,6 +417,7 @@ fi
     $INCLUDE_ARGS \
     -T "$BOOT_TITLE" \
     -C "live.user=${LIVE_USER:-live}" \
+    -C "live.shell=/bin/zsh" \
     ${POSTSETUP_FULL:+-x "$POSTSETUP_FULL"} \
     ${KERNEL_PKG:+-v "$KERNEL_PKG"} \
     $REPO \
