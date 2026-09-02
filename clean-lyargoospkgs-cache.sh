@@ -14,7 +14,7 @@ fi
 # All custom packages from lyargoos-repo
 ALL_PKGS="base-files brave calamares flclash lyargoos-artwork lyargoos-base \
           lyargoos-calamares-config lyargoos-kde-theme lyargoos-welcome lyargoos-xbps \
-          onlyoffice peazip qq ungoogled-chromium vscodium wechat wps-office zen"
+          onlyoffice peazip peazip-gtk2 qq ungoogled-chromium vscodium wechat wps-office zen"
 
 # Use specified packages or all if none specified
 if [ $# -gt 0 ]; then
@@ -26,7 +26,7 @@ else
 fi
 
 for pkg in $PKGS; do
-    sudo rm -f "$CACHE_DIR"/${pkg}-*.xbps 2>/dev/null || true
+    sudo rm -f "$CACHE_DIR"/${pkg}-*.xbps "$CACHE_DIR"/${pkg}-*.xbps.sig2 2>/dev/null || true
 done
 
 echo "Done. Next ISO build will download fresh packages."
