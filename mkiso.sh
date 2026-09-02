@@ -318,7 +318,7 @@ ln -sf /usr/share/alsa/alsa.conf.d/99-pipewire-default.conf "$INCLUDEDIR"/etc/al
 # --- Determine postsetup scripts ---
 # Supports: common postsetup.sh + flavor-specific flavors/$FLAVOR/postsetup.sh
 # Common runs first, then flavor-specific (if both exist)
-COMMON_POSTSETUP="$SCRIPT_DIR/postsetup.sh"
+COMMON_POSTSETUP="$SCRIPT_DIR/postsetup/common.sh"
 FLAVOR_POSTSETUP="$SCRIPT_DIR/flavors/$FLAVOR/postsetup.sh"
 POSTSETUP_FULL=""
 
