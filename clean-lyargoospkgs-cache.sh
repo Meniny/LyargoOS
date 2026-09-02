@@ -14,7 +14,7 @@ fi
 # All custom packages from lyargoos-repo
 ALL_PKGS="base-files brave calamares flclash lyargoos-artwork lyargoos-base \
           lyargoos-calamares-config lyargoos-kde-theme lyargoos-welcome lyargoos-xbps \
-          onlyoffice peazip peazip-gtk2 qq ungoogled-chromium vscodium wechat wps-office zen"
+          onlyoffice peazip-gtk2 peazip-qt6 qq ungoogled-chromium vscodium wechat wps-office zen"
 
 # Use specified packages or all if none specified
 if [ $# -gt 0 ]; then

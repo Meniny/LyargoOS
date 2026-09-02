@@ -150,6 +150,7 @@ case "$ARCH" in
         NONFREE_REPO="$VOID_MIRROR/nonfree"
         VM_PKGS="qemu-ga spice-vdagent"
         VM_SERVICES="spice-vdagentd"
+        X86_64_PKGS="peazip-qt6"
         # x86_64 glibc: only need main repo (musl and aarch64 repos are not needed)
         export XBPS_REPOSITORY="--repository=$VOID_MIRROR"
         ;;
@@ -160,6 +161,7 @@ case "$ARCH" in
         NONFREE_REPO="$VOID_MIRROR/nonfree"
         VM_PKGS=""
         VM_SERVICES=""
+        X86_64_PKGS=""
         # aarch64 glibc: only need aarch64 repo
         export XBPS_REPOSITORY="--repository=$VOID_MIRROR/aarch64"
         ;;
@@ -172,6 +174,7 @@ case "$ARCH" in
         NONFREE_REPO=""
         VM_PKGS=""
         VM_SERVICES=""
+        X86_64_PKGS=""
         # Asahi: aarch64 repo
         export XBPS_REPOSITORY="--repository=$VOID_MIRROR/aarch64"
         ;;
@@ -200,7 +203,7 @@ esac
 # --- Build package and service lists ---
 # Base packages and services from lyargoos.conf
 PKGS="${BASE_PACKAGES[*]}"
-PKGS="$PKGS $VM_PKGS"
+PKGS="$PKGS $VM_PKGS $X86_64_PKGS"
 PKGS="$PKGS $A11Y_PKGS $GRUB_PKGS"
 SERVICES="${BASE_SERVICES[*]} $VM_SERVICES"
 

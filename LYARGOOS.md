@@ -213,7 +213,7 @@ POSTSETUP_SCRIPT="postsetup.sh"
 - Network: flclash
 - Media: vlc (default), smplayer, audacious, audacity, kdenlive, obs-studio, guvcview, celluloid
 - Graphics: gimp, inkscape, krita, flameshot (default)
-- Productivity: peazip, okular, kate
+- Productivity: peazip-qt6, okular, kate
 
 **Base services** (enabled at boot):
 - sshd, chronyd, elogind, spice-vdagentd (x86_64 only)

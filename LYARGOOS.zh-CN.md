@@ -213,7 +213,7 @@ POSTSETUP_SCRIPT="postsetup.sh"
 - 网络：flclash
 - 媒体：vlc（默认）、smplayer、audacious、audacity、kdenlive、obs-studio、guvcview、celluloid
 - 图形：gimp、inkscape、krita、flameshot（默认）
-- 生产力：peazip、okular、kate
+- 生产力：peazip-qt6、okular、kate
 
 **基础服务**（开机自启）：
 - sshd、chronyd、elogind、spice-vdagentd（仅 x86_64）
