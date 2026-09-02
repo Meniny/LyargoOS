@@ -12,7 +12,7 @@ if [ ! -d "$CACHE_DIR" ]; then
 fi
 
 # All custom packages from lyargoos-repo
-ALL_PKGS="brave calamares flclash lyargoos-artwork lyargoos-base lyargoos-base-files \
+ALL_PKGS="base-files brave calamares flclash lyargoos-artwork lyargoos-base \
           lyargoos-calamares-config lyargoos-kde-theme lyargoos-welcome lyargoos-xbps \
           onlyoffice peazip qq ungoogled-chromium vscodium wechat wps-office zen"
 
