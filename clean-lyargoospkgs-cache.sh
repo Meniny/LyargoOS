@@ -28,7 +28,7 @@ EOF
 # All custom packages from lyargoos-repo
 ALL_PKGS="base-files brave calamares flclash lyargoos-artwork lyargoos-base \
           lyargoos-calamares-config lyargoos-kde-theme lyargoos-welcome lyargoos-xbps \
-          onlyoffice peazip-gtk2 peazip-qt6 qq ungoogled-chromium vscodium wechat wps-office zen"
+          localsend localsend-cli onlyoffice peazip-gtk2 peazip-qt6 qq ungoogled-chromium vscodium wechat wps-office zen"
 
 # Check for help flag
 case "${1:-}" in
