@@ -403,7 +403,7 @@ elif [ -f "$FLAVOR_POSTSETUP" ]; then
 fi
 
 # --- Build ISO ---
-IMG="lyargoos-${ARCH}-${DATE}-${FLAVOR}.iso"
+IMG="lyargoos-${FLAVOR}-glibc-${ARCH}-${DATE}.iso"
 
 info "Building LyargoOS ISO: $IMG"
 echo "    void-mklive: $MKLIVE_DIR"
