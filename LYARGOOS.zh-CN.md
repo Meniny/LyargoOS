@@ -31,8 +31,12 @@ lyargoos/                      # 本仓库
 │   └── common/                # 共享 rootfs 覆盖（所有变体）
 │       └── etc/
 │           └── issue          # 登录提示信息
+├── submodule-overlay/
+│   └── void-mklive/           # void-mklive 子模块自定义覆盖
+│       └── dracut/vmklive/
+│           └── adduser.sh     # 自定义用户设置脚本
 ├── postsetup.sh               # 安装后脚本（构建时运行一次）
-├── void-mklive/               # Git 子模块（上游，未修改）
+├── void-mklive/               # Git 子模块（上游，通过 submodule-overlay 自定义）
 ├── .github/workflows/
 │   └── build.yml              # GitHub Actions CI
 ├── LYARGOOS.md                # 本文档（English）
@@ -263,6 +267,34 @@ cp my-monitor.conf overlay/common/etc/X11/xorg.conf.d/90-monitor.conf
 
 **注意：** `os-release` 是从 `lyargoos.conf` 自动生成的 — 不要在 `overlay/` 中放置静态文件。
 
+### 子模块覆盖
+
+`submodule-overlay/` 目录允许你自定义子模块（如 `void-mklive`）中的文件，而不需要修改子模块本身。这保持子模块干净，使更新更容易。
+
+目录结构镜像子模块的结构：
+
+```bash
+submodule-overlay/
+└── void-mklive/               # 匹配子模块名称
+    └── dracut/vmklive/
+        └── adduser.sh         # 自定义版本
+```
+
+在构建过程中，`mkiso.sh` 从 `submodule-overlay/{子模块名称}/` 复制文件到相应的子模块，然后构建。
+
+**示例：** 要自定义 `void-mklive/dracut/vmklive/adduser.sh`：
+
+```bash
+# 创建覆盖目录结构
+mkdir -p submodule-overlay/void-mklive/dracut/vmklive
+
+# 复制并修改文件
+cp void-mklive/dracut/vmklive/adduser.sh submodule-overlay/void-mklive/dracut/vmklive/
+# 编辑 submodule-overlay/void-mklive/dracut/vmklive/adduser.sh 进行你的修改
+```
+
+子模块保持干净（没有本地修改），你的自定义单独维护。当你更新子模块时，你的覆盖会自动重新应用。
+
 ### 登录提示信息
 
 编辑 `overlay/common/etc/issue`。这会在文本登录提示处显示。
@@ -451,6 +483,7 @@ overlay/common/etc/skel/
 | `flavors/gnome/flavor.sh` | GNOME 软件包和服务 |
 | `overlay/common/` | 共享覆盖文件（所有变体） |
 | `flavors/<flavor>/overlay/` | 变体特定的覆盖文件 |
+| `submodule-overlay/<submodule>/` | 构建前覆盖到子模块的文件（保持子模块干净） |
 | `overlay/common/etc/issue` | 登录提示信息 |
 | `postsetup.sh` | 安装后脚本（flatpak 设置、缓存生成等） |
 

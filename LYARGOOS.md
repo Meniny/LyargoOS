@@ -31,8 +31,12 @@ lyargoos/                      # This repository
 │   └── common/                # Shared rootfs overlay (all flavors)
 │       └── etc/
 │           └── issue          # Login message
+├── submodule-overlay/
+│   └── void-mklive/           # Overlay for void-mklive submodule customizations
+│       └── dracut/vmklive/
+│           └── adduser.sh     # Custom user setup script
 ├── postsetup.sh               # Post-install script (runs once during build)
-├── void-mklive/               # Git submodule (upstream, unmodified)
+├── void-mklive/               # Git submodule (upstream, customized via submodule-overlay)
 ├── .github/workflows/
 │   └── build.yml              # GitHub Actions CI
 ├── LYARGOOS.md                # This documentation (English)
@@ -263,6 +267,34 @@ All files in overlay directories are copied into the ISO rootfs, overwriting any
 
 **Note:** `os-release` is generated automatically from `lyargoos.conf` — do not place a static one in `overlay/`.
 
+### Submodule Overlays
+
+The `submodule-overlay/` directory allows you to customize files in submodules (like `void-mklive`) without modifying the submodule itself. This keeps submodules clean and makes updates easier.
+
+The directory structure mirrors the submodule's structure:
+
+```bash
+submodule-overlay/
+└── void-mklive/               # Matches the submodule name
+    └── dracut/vmklive/
+        └── adduser.sh         # Customized version
+```
+
+During the build, `mkiso.sh` copies files from `submodule-overlay/{submodule-name}/` into the corresponding submodule before building.
+
+**Example:** To customize `void-mklive/dracut/vmklive/adduser.sh`:
+
+```bash
+# Create the overlay directory structure
+mkdir -p submodule-overlay/void-mklive/dracut/vmklive
+
+# Copy and modify the file
+cp void-mklive/dracut/vmklive/adduser.sh submodule-overlay/void-mklive/dracut/vmklive/
+# Edit submodule-overlay/void-mklive/dracut/vmklive/adduser.sh with your changes
+```
+
+The submodule stays clean (no local modifications), and your customizations are maintained separately. When you update the submodule, your overlay is automatically reapplied.
+
 ### Login Message
 
 Edit `overlay/common/etc/issue`. This is displayed at the text login prompt.
@@ -451,6 +483,7 @@ overlay/common/etc/skel/
 | `flavors/gnome/flavor.sh` | GNOME packages and services |
 | `overlay/common/` | Shared files overlaid into the ISO rootfs (all flavors) |
 | `flavors/<flavor>/overlay/` | Per-flavor files overlaid into the ISO rootfs |
+| `submodule-overlay/<submodule>/` | Files overlaid into submodules before build (keeps submodules clean) |
 | `overlay/common/etc/issue` | Login prompt message |
 | `postsetup.sh` | Post-install script (flatpak setup, cache generation, etc.) |
 

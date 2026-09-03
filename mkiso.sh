@@ -53,6 +53,55 @@ if [ ! -f "$MKLIVE_DIR/mklive.sh" ]; then
     exit 1
 fi
 
+# --- Offer to update submodules ---
+if [ -f "$SCRIPT_DIR/.gitmodules" ]; then
+    # Extract submodule paths from .gitmodules
+    submodule_paths=$(grep -E '^\s*path\s*=' "$SCRIPT_DIR/.gitmodules" | sed 's/.*=\s*//')
+
+    for sub_path in $submodule_paths; do
+        sub_full="$SCRIPT_DIR/$sub_path"
+        sub_name=$(basename "$sub_path")
+
+        if [ ! -d "$sub_full" ]; then
+            continue
+        fi
+
+        echo -n "Update $sub_name? [y/N] "
+        read -r response
+        case "$response" in
+            [yY][eE][sS]|[yY])
+                info "Updating $sub_name..."
+                cd "$sub_full"
+                if git pull --quiet; then
+                    success "Updated $sub_name"
+                else
+                    warn "Failed to update $sub_name"
+                fi
+                cd "$SCRIPT_DIR"
+                ;;
+        esac
+    done
+fi
+
+# --- Apply submodule overlays ---
+SUBMODULE_OVERLAY_DIR="$SCRIPT_DIR/submodule-overlay"
+if [ -d "$SUBMODULE_OVERLAY_DIR" ]; then
+    for overlay_subdir in "$SUBMODULE_OVERLAY_DIR"/*/; do
+        [ -d "$overlay_subdir" ] || continue
+        sub_name=$(basename "$overlay_subdir")
+        sub_full="$SCRIPT_DIR/$sub_name"
+
+        if [ ! -d "$sub_full" ]; then
+            warn "Submodule '$sub_name' not found, skipping overlay"
+            continue
+        fi
+
+        info "Applying overlay for $sub_name..."
+        # Copy overlay files into submodule, preserving structure
+        cp -r "$overlay_subdir"* "$sub_full/" 2>/dev/null || true
+    done
+fi
+
 # --- Source lib.sh from mklive ---
 . "$MKLIVE_DIR/lib.sh"
 
