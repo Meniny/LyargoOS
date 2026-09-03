@@ -26,6 +26,10 @@
 
 Because I'm lazy.
 
+## Download
+
+Go to [SourceForge](https://sourceforge.net/projects/lyargoos/files/).
+
 ## Quick Start
 
 ```bash

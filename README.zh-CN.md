@@ -26,6 +26,10 @@
 
 因为我懒。
 
+## 下载
+
+前往 [SourceForge](https://sourceforge.net/projects/lyargoos/files/)。
+
 ## 快速开始
 
 ```bash
